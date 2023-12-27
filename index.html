@@ -3,65 +3,46 @@
 <head>
   <title>QR Code Scanner</title>
   <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+  </head>
   <style>
-    section {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+section{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+ }
+ #result{
+    font-size: 5rem;
+ }
   </style>
-</head>
-<body>
-  <section>
-    <video id="preview"></video>
-  </section>
-  <p id="result"></p>
-  <button onclick="toggleCamera()">Toggle Camera</button>
+  <body>
+    <section>
 
+        <video id="preview"></video>
+    </section>
+<p id="result"></p>
   <script type="text/javascript">
-    let scanner;
-    let cameras = [];
-
-    function initScanner() {
-      // Create a new instance of the Instascan scanner
-      scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
-
-      // Add a listener for the 'scan' event, triggered when a QR code is successfully scanned
-      scanner.addListener('scan', function(content) {
-        console.log('Scanned content: ' + content);
-        // Do something with the scanned content, e.g., display it on the page
-        document.getElementById('result').textContent = content;
-      });
-
-      // Get the available cameras
-      Instascan.Camera.getCameras().then(function(camerasList) {
-        cameras = camerasList;
-        if (cameras.length > 0) {
-          // Start scanning with the first camera
-          scanner.start(cameras[0]);
-        } else {
-          console.error('No cameras found.');
-        }
-      }).catch(function(e) {
-        console.error(e);
-      });
-    }
-
-    function toggleCamera() {
-      if (cameras.length > 1) {
-        // Toggle between the front and back camera
-        const currentCamera = scanner._activeCamera;
-        const newCamera = currentCamera === cameras[0] ? cameras[1] : cameras[0];
+    // Create a new instance of the Instascan scanner
+    let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+  
+    // Add a listener for the 'scan' event, triggered when a QR code is successfully scanned
+    scanner.addListener('scan', function(content) {
+      console.log('Scanned content: ' + content);
+      // Do something with the scanned content, e.g., display it on the page
+      document.getElementById('result').textContent = content;
+    });
+  
+    // Get the available cameras and start scanning with the first camera
+    Instascan.Camera.getCameras().then(function(cameras) {
+      if (cameras.length > 0) {
+        scanner.start(cameras[0]);
+      } else {
+        console.error('No cameras found.');
         
-        // Stop the current camera and start scanning with the new camera
-        scanner.stop().then(function() {
-          scanner.start(newCamera);
-        });
       }
-    }
-
-    // Initialize the scanner on page load
-    initScanner();
+    }).catch(function(e) {
+      console.error(e);
+    });
   </script>
-</body>
-</html>
+
+  </body>
+  </html>
