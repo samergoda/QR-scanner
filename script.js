@@ -28,8 +28,8 @@ scanner.addListener('scan', function(content) {
 
 Instascan.Camera.getCameras().then(function(cameras) {
   if (cameras.length > 0) {
-    // Find the back camera (position: 'environment')
-    const backCamera = cameras.find(camera => camera.name.toLowerCase().includes('back') || camera.position === 'environment');
+    // Find a camera by checking if it is not labeled as the front camera
+    const backCamera = cameras.find(camera => !camera.name.toLowerCase().includes('front'));
 
     // If a back camera is found, start scanning with it; otherwise, use the first available camera
     scanner.start(backCamera || cameras[0]);
@@ -39,3 +39,4 @@ Instascan.Camera.getCameras().then(function(cameras) {
 }).catch(function(e) {
   console.error(e);
 });
+
