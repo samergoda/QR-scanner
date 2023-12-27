@@ -37,7 +37,7 @@
       });
 
       // Start scanning with the back camera if found, otherwise use the first camera
-      scanner.start(backCamera || cameras[0]);
+      scanner.start(backCamera);
     }  else {
         console.error('No cameras found.');
         
