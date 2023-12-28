@@ -22,43 +22,28 @@ section{
 <p id="result"></p>
   <script type="text/javascript">
 
-let scanner;
-let currentCameraIndex = 0;
+  // Create a new instance of the Instascan scanner
+  let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
 
-function startScanner(cameraIndex) {
-  if (scanner) {
-    scanner.stop();
-  }
-
-  scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
-  
+  // Add a listener for the 'scan' event, triggered when a QR code is successfully scanned
   scanner.addListener('scan', function(content) {
     console.log('Scanned content: ' + content);
+    // Do something with the scanned content, e.g., display it on the page
     document.getElementById('result').textContent = content;
   });
 
+  // Get the available cameras and start scanning with the first camera
   Instascan.Camera.getCameras().then(function(cameras) {
     if (cameras.length > 0) {
-      if (cameraIndex < cameras.length) {
-        scanner.start(cameras[cameraIndex]);
-        currentCameraIndex = cameraIndex;
-      } else {
-        console.error('Invalid camera index.');
-      }
+      scanner.start(cameras[0]);
     } else {
       console.error('No cameras found.');
     }
   }).catch(function(e) {
     console.error(e);
   });
-}
+</script>
 
-// Call this function when you want to switch to the other camera
-function toggleCamera() {
-  const nextCameraIndex = (currentCameraIndex + 1) % 2; // Assuming there are only two cameras
-  startScanner(nextCameraIndex);
-}
-  </script>
 
   </body>
   </html>
